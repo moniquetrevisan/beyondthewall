@@ -1,6 +1,13 @@
-*.properties
-*.classpath
-campanha-service/campanha/.project
-*.prefs
 *.class
-*.MF
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.project
+*.metadata
+target/
+bin/**
+*.classpath
+*.settings
+*.springBeans
