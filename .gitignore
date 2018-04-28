@@ -1,1 +1,6 @@
 *.properties
+*.classpath
+campanha-service/campanha/.project
+*.prefs
+*.class
+*.MF
