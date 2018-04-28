@@ -6,9 +6,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,11 +48,9 @@ public class Campanha implements Serializable {
 	@Convert(converter = StatusCampanha.class)
 	private StatusCampanha statusCampanha;
 
-	/**
-	 * OneToOne(fetch = FetchType.LAZY) OneToOne(fetch = FetchType.LAZY)
-	 * JoinColumn(name = "timeCoracaoId", nullable = false) private Integer
-	 * statusCampanha;
-	 */
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "timeCoracaoId", nullable = false)
+	private TimeCoracao timeCoracao;
 
 	public Integer getCampanhaId() {
 		return campanhaId;
@@ -98,39 +99,78 @@ public class Campanha implements Serializable {
 	public void setStatusCampanha(StatusCampanha statusCampanha) {
 		this.statusCampanha = statusCampanha;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-			}
-			if (obj == null || getClass() != obj.getClass()) {
-				return false;
-			}
-			Campanha other = (Campanha) obj;
-			if(campanhaId == other.getCampanhaId() && nome.trim().equalsIgnoreCase(other.getNome())) {
-				return true;
-			}
-			return false;
+	
+	public TimeCoracao getTimeCoracao() {
+		return timeCoracao;
+	}
+	
+	public void setTimeCoracao(TimeCoracao timeCoracao) {
+		this.timeCoracao = timeCoracao;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((statusCampanha == null) ? 0 : statusCampanha.hashCode());
+		result = prime * result + ((campanhaId == null) ? 0 : campanhaId.hashCode());
+		result = prime * result + ((dataInicio == null) ? 0 : dataInicio.hashCode());
 		result = prime * result + ((dataUltimaAtualizacao == null) ? 0 : dataUltimaAtualizacao.hashCode());
 		result = prime * result + ((dataVencimento == null) ? 0 : dataVencimento.hashCode());
-		result = prime * result + ((dataInicio == null) ? 0 : dataInicio.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		result = prime * result + ((campanhaId == null) ? 0 : campanhaId.hashCode());
+		result = prime * result + ((statusCampanha == null) ? 0 : statusCampanha.hashCode());
+		result = prime * result + ((timeCoracao == null) ? 0 : timeCoracao.hashCode());
 		return result;
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Campanha other = (Campanha) obj;
+		if (campanhaId == null) {
+			if (other.campanhaId != null)
+				return false;
+		} else if (!campanhaId.equals(other.campanhaId))
+			return false;
+		if (dataInicio == null) {
+			if (other.dataInicio != null)
+				return false;
+		} else if (!dataInicio.equals(other.dataInicio))
+			return false;
+		if (dataUltimaAtualizacao == null) {
+			if (other.dataUltimaAtualizacao != null)
+				return false;
+		} else if (!dataUltimaAtualizacao.equals(other.dataUltimaAtualizacao))
+			return false;
+		if (dataVencimento == null) {
+			if (other.dataVencimento != null)
+				return false;
+		} else if (!dataVencimento.equals(other.dataVencimento))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (statusCampanha != other.statusCampanha)
+			return false;
+		if (timeCoracao == null) {
+			if (other.timeCoracao != null)
+				return false;
+		} else if (!timeCoracao.equals(other.timeCoracao))
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
-		// not yet ... 
-		return null;
+		return "Campanha [campanhaId=" + campanhaId + ", nome=" + nome + ", dataInicio=" + dataInicio
+				+ ", dataVencimento=" + dataVencimento + ", dataUltimaAtualizacao=" + dataUltimaAtualizacao
+				+ ", statusCampanha=" + statusCampanha + ", timeCoracao=" + timeCoracao + "]";
 	}
 
 }
