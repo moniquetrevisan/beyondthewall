@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,8 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.moniquetrevisan.basic.campanhaservice.enums.StatusCliente;
-
 @Entity
 @Table(name = "cliente")
 public class Cliente implements Serializable {
@@ -26,22 +23,21 @@ public class Cliente implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "clienteId", nullable = false)
+	@Column(name = "clienteId")
 	private Integer clienteId;
 
-	@Column(name = "nomeCompleto", nullable = false)
+	@Column(name = "nomeCompleto")
 	private String nomeCompleto;
 
-	@Column(name = "dataNascimento", nullable = false)
+	@Column(name = "dataNascimento")
 	@Temporal(TemporalType.DATE)
 	private Date dataNasciamento;
 
-	@Column(name = "statusCliente", nullable = false)
-	@Convert(converter = StatusCliente.class)
-	private StatusCliente statusCliente;
+	@Column(name = "statusCliente")
+	private Integer statusCliente;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "timeCoracaoId", nullable = false)
+	@JoinColumn(name = "timeCoracaoId")
 	private TimeCoracao timeCoracao;
 
 	public Integer getClienteId() {
@@ -68,11 +64,11 @@ public class Cliente implements Serializable {
 		this.dataNasciamento = dataNasciamento;
 	}
 
-	public StatusCliente getStatusCliente() {
+	public Integer getStatusCliente() {
 		return statusCliente;
 	}
 
-	public void setStatusCliente(StatusCliente statusCliente) {
+	public void setStatusCliente(Integer statusCliente) {
 		this.statusCliente = statusCliente;
 	}
 

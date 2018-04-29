@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,8 +14,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import com.moniquetrevisan.basic.campanhaservice.enums.StatusCampanha;
 
 @Entity
 @Table(name = "campanha")
@@ -45,8 +42,7 @@ public class Campanha implements Serializable {
 	private Date dataUltimaAtualizacao;
 
 	@Column(name = "statusCampanha", nullable = false)
-	@Convert(converter = StatusCampanha.class)
-	private StatusCampanha statusCampanha;
+	private Integer statusCampanha;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "timeCoracaoId", nullable = false)
@@ -92,11 +88,11 @@ public class Campanha implements Serializable {
 		this.dataUltimaAtualizacao = dataUltimaAtualizacao;
 	}
 
-	public StatusCampanha getStatusCampanha() {
+	public Integer getStatusCampanha() {
 		return statusCampanha;
 	}
 
-	public void setStatusCampanha(StatusCampanha statusCampanha) {
+	public void setStatusCampanha(Integer statusCampanha) {
 		this.statusCampanha = statusCampanha;
 	}
 	
