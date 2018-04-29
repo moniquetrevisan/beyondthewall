@@ -13,7 +13,7 @@ CREATE TABLE `dev`.`campanha` (
   `dataInicio` DATE NOT NULL,
   `dataVencimento` DATE NOT NULL,
   `dataUltimaAtualizacao` DATE NULL,
-  `statusCampanha` INT(1) NULL DEFAULT 2 COMMENT '1 - Ativa\n2 - Inativa\n3 - Expirada',
+  `statusCampanha` INT(1) NULL DEFAULT 2 COMMENT '1 - Ativa\n2 - Pendente\n3 - Expirada',
   PRIMARY KEY (`campanhaId`))
 COMMENT = 'Armazena os dados da campanha';
 

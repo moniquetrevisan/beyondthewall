@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -16,12 +14,15 @@ public class TimeCoracao implements Serializable {
 	private static final long serialVersionUID = -2745581898200832582L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "timeCoracaoId", nullable = false)
 	private Integer timeCoracaoId;
 
 	@Column(name = "timeCoracaoNome", nullable = false)
 	private String timeCoracaoNome;
+
+	public TimeCoracao(Integer timeCoracaoId2) {
+		// TODO Auto-generated constructor stub
+	}
 
 	public Integer getTimeCoracaoId() {
 		return timeCoracaoId;
