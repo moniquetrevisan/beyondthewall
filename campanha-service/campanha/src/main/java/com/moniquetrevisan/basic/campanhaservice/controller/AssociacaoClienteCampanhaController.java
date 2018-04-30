@@ -22,10 +22,10 @@ import com.moniquetrevisan.basic.campanhaservice.service.AssociacaoClienteCampan
 public class AssociacaoClienteCampanhaController {
 
 	private static Logger log = Logger.getLogger(AssociacaoClienteCampanhaController.class);
-	
+
 	@Autowired
 	private AssociacaoClienteCampanhaService associacaoService;
-	
+
 	@RequestMapping(path="/{clienteId}", method = RequestMethod.GET)
 	public ResponseEntity<List<Campanha>> findAllCampanhasAssociadasByCliente(@PathVariable("clienteId") Integer clienteId){
 		ResponseEntity<List<Campanha>> response = null;
@@ -38,7 +38,7 @@ public class AssociacaoClienteCampanhaController {
 		}
 		return response;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Campanha>> consultarCampanhasNaoAssociadas(@RequestParam("clienteId") Integer clienteId, @RequestParam("timeCoracaoId") Integer timeCoracaoId){
 		ResponseEntity<List<Campanha>> response = null;
@@ -52,7 +52,7 @@ public class AssociacaoClienteCampanhaController {
 		}
 		return response;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<AssociacaoCampanhaCliente> associateNew(@RequestBody AssociacaoCampanhaCliente associacao){
 		ResponseEntity<AssociacaoCampanhaCliente> response = null;
@@ -65,5 +65,5 @@ public class AssociacaoClienteCampanhaController {
 		}
 		return response;
 	}
-	
+
 }

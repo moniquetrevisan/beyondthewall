@@ -20,8 +20,8 @@ public class TimeCoracao implements Serializable {
 	@Column(name = "timeCoracaoNome", nullable = false)
 	private String timeCoracaoNome;
 
-	public TimeCoracao(Integer timeCoracaoId2) {
-		// TODO Auto-generated constructor stub
+	public TimeCoracao(Integer timeCoracaoId) {
+		this.timeCoracaoId = timeCoracaoId;
 	}
 
 	public Integer getTimeCoracaoId() {

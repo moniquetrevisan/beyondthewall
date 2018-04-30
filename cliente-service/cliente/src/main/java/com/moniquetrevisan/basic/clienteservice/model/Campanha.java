@@ -16,7 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.moniquetrevisan.basic.clienteservice.util.DateUtil;
-
+import com.moniquetrevisan.basic.clienteservice.util.StatusDefaults;
 
 @Entity
 @Table(name = "campanha")
@@ -43,28 +43,23 @@ public class Campanha implements Serializable {
 	@Column(name = "dataUltimaAtualizacao", nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date dataUltimaAtualizacao;
-	
-	/**
-	 * 1 - Ativa
-	 * 2 - Pendente
-	 * 3 - Expirada
-	 */
+
 	@Column(name = "statusCampanha", nullable = false)
 	private Integer statusCampanha;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "timeCoracaoId", nullable = false)
 	private TimeCoracao timeCoracao;
-	
+
 	public Campanha(String nome, Integer timeCoracaoId, Date dataInicio, Date dataVencimento) {
 		this.nome = nome;
 		this.dataInicio = dataInicio;
 		this.dataVencimento = dataVencimento;
 		this.dataUltimaAtualizacao = DateUtil.today();
 		if(DateUtil.isToday(dataInicio)) {
-			this.statusCampanha = 1; // a campanha tem inicio no mesmo dia / imediato
+			this.statusCampanha = StatusDefaults.CAMPANHA_ATIVA; // a campanha tem inicio no mesmo dia / imediato
 		} else {
-			this.statusCampanha = 2; // a campanha tem inicio em uma data futura
+			this.statusCampanha = StatusDefaults.CAMPANHA_PENDENTE; // a campanha tem inicio em uma data futura
 		}
 		this.timeCoracao = new TimeCoracao(timeCoracaoId);
 	}

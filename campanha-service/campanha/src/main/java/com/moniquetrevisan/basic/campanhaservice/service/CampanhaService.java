@@ -41,11 +41,9 @@ public class CampanhaService {
 			notFoundAlerta = Boolean.TRUE;
 			errorMessage = "Esta campanha esta expirada e portanto não sera retornada.";
 		}
-
 		if (notFoundAlerta && !errorMessage.isEmpty()) {
 			throw new NotFoundException(errorMessage);
 		}
-
 		return repository.findOne(campanhaId);
 	}
 
@@ -57,7 +55,7 @@ public class CampanhaService {
 	public List<Campanha> findAllCampanhasAssociadasByCliente(Integer clienteId) {
 		return associacaoRepository.findAllCampanhasAssociadasByCliente(clienteId);
 	}
-	
+
 	/**
 	 * Procura todas as campanhas ativas para determinado time do coracao
 	 * @param timeCoracaoId - time a ser procurado
@@ -74,7 +72,7 @@ public class CampanhaService {
 	public void delete(Integer campanhaId) {
 		repository.delete(campanhaId);
 	}
-	
+
 	/**
 	 * Salva no banco de dados uma nova campanha
 	 * @param campanha - campanha a ser gravada no banco de dados
@@ -121,28 +119,24 @@ public class CampanhaService {
 		if (campanhaOverlappings == null || campanhaOverlappings.isEmpty()) {
 			return;
 		}
-
 		Campanha currentCampanha = campanhaOverlappings.get(0);
 		if (currentCampanha.getDataVencimento().compareTo(campanhaRef.getDataVencimento()) <= 0) {
 			currentCampanha.setDataVencimento(DateUtil.plusDay(campanhaRef.getDataVencimento()));
 		}
-
 		// call again recursively
 		List<Campanha> rest = campanhaOverlappings.subList(1, campanhaOverlappings.size());
 		addDayInOverlappings(rest, currentCampanha);
 	}
-	
+
 	public List<Campanha> consultarCampanhasDoTimeDoCoracaoNaoAssociadas(Integer timeCoracaoId, List<Campanha> campanhasAssociadas) throws AllAssociateException {
 		List<Integer> campanhaIds = campanhasAssociadas.stream().map(Campanha::getCampanhaId).collect(Collectors.toList());
-		
+
 		List<Campanha> notAssociate = repository.findCampanhaNotAssociate(timeCoracaoId, StatusDefaults.CAMPANHA_EXPIRADA, campanhaIds);
-		
+
 		if(notAssociate == null || notAssociate.isEmpty()) {
 			throw new AllAssociateException(String.format("Campanhas do time do coração %d já associadas", timeCoracaoId));
 		}
-		
 		return notAssociate;
-		
 	}
 
 }

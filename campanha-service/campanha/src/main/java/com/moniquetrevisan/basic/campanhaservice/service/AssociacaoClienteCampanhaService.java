@@ -16,7 +16,7 @@ import com.moniquetrevisan.basic.campanhaservice.repository.AssociacaoCampanhaCl
 public class AssociacaoClienteCampanhaService {
 
 	private static Logger log = Logger.getLogger(AssociacaoClienteCampanhaService.class);
-	
+
 	@Autowired
 	private AssociacaoCampanhaClienteRepository repository;
 
@@ -40,10 +40,9 @@ public class AssociacaoClienteCampanhaService {
 			log.warn(String.format("Cliente %d não possui campanhas associadas", clienteId));
 			notAssociated = campanhaService.findAllCampanhasByTimeCoracao(timeCoracaoId);
 		}
-		
 		return notAssociated;
 	}
-	
+
 	public AssociacaoCampanhaCliente create(AssociacaoCampanhaCliente assoc) {
 		return repository.save(assoc);
 	}
