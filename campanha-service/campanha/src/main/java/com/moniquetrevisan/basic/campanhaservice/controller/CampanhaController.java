@@ -29,7 +29,7 @@ public class CampanhaController {
 	public ResponseEntity<Campanha> findById(@PathVariable("campanhaId") Integer campanhaId){
 		ResponseEntity<Campanha> response = null;
 		try {
-			Campanha campanha = service.findById(campanhaId);
+			Campanha campanha = service.findCampanhaByCampanhaId(campanhaId);
 			response = new ResponseEntity<Campanha>(campanha, HttpStatus.OK);
 		} catch (NotFoundException e) {
 			log.error(e.getMessage(), e);

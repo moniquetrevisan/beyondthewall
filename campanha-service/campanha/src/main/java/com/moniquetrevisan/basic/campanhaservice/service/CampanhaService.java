@@ -26,7 +26,7 @@ public class CampanhaService {
 	 * @return a camanha ativa correspondente a este id
 	 * @throws NotFoundException - Ou nao existe referente ou a campanha esta expirada e por isso nao deve ser retornada
 	 */
-	public Campanha findById(Integer campanhaId) throws NotFoundException {
+	public Campanha findCampanhaByCampanhaId(Integer campanhaId) throws NotFoundException {
 		boolean notFoundAlerta = Boolean.FALSE;
 		String errorMessage = "";
 
