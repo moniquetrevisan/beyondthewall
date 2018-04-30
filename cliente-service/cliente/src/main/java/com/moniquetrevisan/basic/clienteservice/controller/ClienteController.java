@@ -10,48 +10,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.moniquetrevisan.basic.campanhaservice.model.Cliente;
+import com.moniquetrevisan.basic.clienteservice.model.Cliente;
+import com.moniquetrevisan.basic.clienteservice.service.ClienteService;
 
 @RestController
 @RequestMapping("/cliente")
 public class ClienteController {
 
 private static Logger log = Logger.getLogger(ClienteController.class);
-	
+
 	@Autowired
 	private ClienteService service;
-	
-	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Cliente> getCliente(@PathVariable("id") Long clienteId){
+
+	@RequestMapping(path = "/findClienteByClienteId/{clienteId}", method = RequestMethod.GET)
+	public ResponseEntity<Cliente> findClienteByClienteId(@PathVariable("clienteId") Integer clienteId){
 		ResponseEntity<Cliente> response = null;
 		try {
-			log.info("Consultando cliente " + clienteId);
-			Cliente clienteCadastrado = service.consultar(clienteId);
-			response = new ResponseEntity<Cliente>(clienteCadastrado, HttpStatus.CREATED);
-			log.info("Cliente cadastrado com sucesso: " + clienteCadastrado);
-		} catch (ClienteNaoEncontradoException e) {
-			log.error(e.getMessage(), e);
-			response = new ResponseEntity<Cliente>(HttpStatus.NO_CONTENT);
+			Cliente cliente = service.findClienteByClienteId(clienteId);
+			response = new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			response = new ResponseEntity<Cliente>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return response;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente){
+	public ResponseEntity<Cliente> create(@RequestBody Cliente cliente){
 		ResponseEntity<Cliente> response = null;
 		try {
-			log.info("Cadastrando cliente " + cliente);
-			Cliente clienteCadastrado = service.cadastrar(cliente);
-			response = new ResponseEntity<Cliente>(clienteCadastrado, HttpStatus.CREATED);
-			log.info("Cliente cadastrado com sucesso: " + clienteCadastrado);
+			Cliente created = service.save(cliente);
+			response = new ResponseEntity<Cliente>(created, HttpStatus.CREATED);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			response = new ResponseEntity<Cliente>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return response;
 	}
-	
+
 }

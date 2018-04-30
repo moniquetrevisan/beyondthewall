@@ -1,4 +1,4 @@
-package com.moniquetrevisan.basic.campanhaservice.model;
+package com.moniquetrevisan.basic.clienteservice.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,7 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.moniquetrevisan.basic.campanhaservice.util.DateUtil;
+import com.moniquetrevisan.basic.clienteservice.util.DateUtil;
+
 
 @Entity
 @Table(name = "campanha")

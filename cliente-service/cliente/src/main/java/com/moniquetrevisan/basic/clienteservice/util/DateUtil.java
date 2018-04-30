@@ -1,4 +1,4 @@
-package com.moniquetrevisan.basic.campanhaservice.util;
+package com.moniquetrevisan.basic.clienteservice.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

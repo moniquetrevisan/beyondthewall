@@ -1,4 +1,4 @@
-package com.moniquetrevisan.basic.campanhaservice.model;
+package com.moniquetrevisan.basic.clienteservice.model;
 
 import java.io.Serializable;
 

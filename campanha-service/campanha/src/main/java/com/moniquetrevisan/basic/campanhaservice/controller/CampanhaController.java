@@ -55,15 +55,12 @@ public class CampanhaController {
 	}
 	
 	
-	@RequestMapping(path = "/AllCampanhasByTimeCoracaoId/{timeCoracaoId}", method = RequestMethod.GET)
+	@RequestMapping(path = "/findAllCampanhasByTimeCoracaoId/{timeCoracaoId}", method = RequestMethod.GET)
 	public ResponseEntity<List<Campanha>> findAllCampanhasByTimeCoracaoId(@PathVariable("timeCoracaoId") Integer timeCoracaoId){
 		ResponseEntity<List<Campanha>> response = null;
 		try {
 			List<Campanha> campanha = service.findAllCampanhasByTimeCoracao(timeCoracaoId);
 			response = new ResponseEntity<List<Campanha>>(campanha, HttpStatus.OK);
-		} catch (NotFoundException e) {
-			log.error(e.getMessage(), e);
-			response =  new ResponseEntity<List<Campanha>>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			response =  new ResponseEntity<List<Campanha>>(HttpStatus.INTERNAL_SERVER_ERROR);
