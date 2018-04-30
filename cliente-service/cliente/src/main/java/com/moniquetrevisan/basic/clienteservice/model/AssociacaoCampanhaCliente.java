@@ -30,6 +30,11 @@ public class AssociacaoCampanhaCliente implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "clienteId", nullable = false)
 	private Cliente cliente;
+	
+	public AssociacaoCampanhaCliente(Campanha campanha, Cliente cliente) {
+		this.campanha = campanha;
+		this.cliente = cliente;
+	}
 
 	public Integer getAsscCampanhaClienteId() {
 		return asscCampanhaClienteId;

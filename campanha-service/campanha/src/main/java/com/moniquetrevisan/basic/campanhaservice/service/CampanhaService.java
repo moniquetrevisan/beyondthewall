@@ -1,10 +1,12 @@
 package com.moniquetrevisan.basic.campanhaservice.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.moniquetrevisan.basic.campanhaservice.exception.AllAssociateException;
 import com.moniquetrevisan.basic.campanhaservice.exception.NotFoundException;
 import com.moniquetrevisan.basic.campanhaservice.model.Campanha;
 import com.moniquetrevisan.basic.campanhaservice.repository.AssociacaoCampanhaClienteRepository;
@@ -128,6 +130,19 @@ public class CampanhaService {
 		// call again recursively
 		List<Campanha> rest = campanhaOverlappings.subList(1, campanhaOverlappings.size());
 		addDayInOverlappings(rest, currentCampanha);
+	}
+	
+	public List<Campanha> consultarCampanhasDoTimeDoCoracaoNaoAssociadas(Integer timeCoracaoId, List<Campanha> campanhasAssociadas) throws AllAssociateException {
+		List<Integer> campanhaIds = campanhasAssociadas.stream().map(Campanha::getCampanhaId).collect(Collectors.toList());
+		
+		List<Campanha> notAssociate = repository.findCampanhaNotAssociate(timeCoracaoId, StatusDefaults.CAMPANHA_EXPIRADA, campanhaIds);
+		
+		if(notAssociate == null || notAssociate.isEmpty()) {
+			throw new AllAssociateException(String.format("Campanhas do time do coração %d já associadas", timeCoracaoId));
+		}
+		
+		return notAssociate;
+		
 	}
 
 }

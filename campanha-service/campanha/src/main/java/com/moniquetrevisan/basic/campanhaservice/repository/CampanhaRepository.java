@@ -42,4 +42,11 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Integer> {
 			+ "   and campanha.timeCoracaoId = :timeCoracaoId ")
 	List<Campanha> findCampanhaByTimeCoracaoId(@Param("timeCoracaoId") Integer timeCoracaoId, @Param("status") Integer status);
 
+	@Query("select campanha "
+			+ " from Campanha campanha "
+			+ " where campanha.statusCampanha <> :status "
+			+ "   and campanha.timeCoracaoId = :timeCoracaoId "
+			+ "   and campanha.campanhaId not in :timeCoracaoId ")
+	List<Campanha> findCampanhaNotAssociate(@Param("timeCoracaoId") Integer timeCoracaoId, @Param("status") Integer status, @Param("campanhaIds")List<Integer> campanhaIds);
+
 }

@@ -23,4 +23,10 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 		+ "   and cliente.clienteId = :clienteId")
 	Cliente findClienteByClienteId(@Param("clienteId") Integer clienteId);
 
+	@Query("select cliente " 
+			+ " from Cliente cliente " 
+			+ " where cliente.statusCliente <> 2 "
+			+ "   and cliente.email = :email")
+	Cliente findClienteByEmail(@Param("email") String email);
+
 }

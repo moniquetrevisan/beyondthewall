@@ -69,8 +69,6 @@ public class Campanha implements Serializable {
 		this.timeCoracao = new TimeCoracao(timeCoracaoId);
 	}
 	
-	
-
 	public Integer getCampanhaId() {
 		return campanhaId;
 	}
