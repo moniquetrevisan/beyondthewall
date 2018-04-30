@@ -13,40 +13,33 @@ import com.moniquetrevisan.basic.campanhaservice.model.Campanha;
 @Repository
 public interface CampanhaRepository extends JpaRepository<Campanha, Integer> {
 
-	/* 
-	 * StatusCampanha
-	 *   1 - Ativa
-	 *   2 - Pendente
-	 *   3 - Expirada
-	 */
-
 	@Query("select campanha "
 			+ " from Campanha campanha "
-			+ " where campanha.statusCampanha <> 3 "
+			+ " where campanha.statusCampanha <> :status "
 			+ "   and campanha.campanhaId = :campanhaId ")
-	Campanha findCampanhaByCampanhaId(@Param("campanhaId") Integer campanhaId);
+	Campanha findCampanhaByCampanhaId(@Param("campanhaId") Integer campanhaId, @Param("status") Integer status);
 
 	@Query("select campanha "
 		+ " from Campanha campanha, AssociacaoClienteCampanha assoc "
 		+ " where campanha.campanhaId = assoc.campanhaId "
-		+ "   and campanha.statusCampanha <> 3 "
+		+ "   and campanha.statusCampanha <> :status "
 		+ "   and assoc.clienteId = :clienteId ")
-	List<Campanha> findCampanhaByClienteId(@Param("clienteId") Integer clienteId);
+	List<Campanha> findCampanhaByClienteId(@Param("clienteId") Integer clienteId, @Param("status") Integer status);
 
 	@Query("select campanha "
 		+ " from Campanha campanha "
 		+ " where campanha.campanhaId <> :campanhaId "
 		+ "   and campanha.timeCoracaoId = :timeCoracaoId "
-		+ "   and campanha.statusCampanha <> 3 "
+		+ "   and campanha.statusCampanha <> :status "
 		+ "   and campanha.dataVencimento >= :dataInicio "
 		+ "   and campanha.dataVencimento <= :dataVencimento "
 		+ " orderby campanha.dataVencimento asc ")
-	List<Campanha> findOverlapCampanhas(@Param("campanhaId") Integer campanhaId, @Param("timeCoracaoId") Integer timeCoracaoId, @Param("dataInicio") Date dataInicio, @Param("dataVencimento") Date dataVencimento);
+	List<Campanha> findOverlapCampanhas(@Param("campanhaId") Integer campanhaId, @Param("timeCoracaoId") Integer timeCoracaoId, @Param("dataInicio") Date dataInicio, @Param("dataVencimento") Date dataVencimento, @Param("status") Integer status);
 
 	@Query("select campanha "
 			+ " from Campanha campanha "
-			+ " where campanha.statusCampanha <> 3 "
+			+ " where campanha.statusCampanha <> :status "
 			+ "   and campanha.timeCoracaoId = :timeCoracaoId ")
-	List<Campanha> findCampanhaByTimeCoracaoId(@Param("timeCoracaoId") Integer timeCoracaoId);
+	List<Campanha> findCampanhaByTimeCoracaoId(@Param("timeCoracaoId") Integer timeCoracaoId, @Param("status") Integer status);
 
 }

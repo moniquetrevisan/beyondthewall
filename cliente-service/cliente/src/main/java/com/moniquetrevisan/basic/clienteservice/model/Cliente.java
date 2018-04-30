@@ -29,9 +29,12 @@ public class Cliente implements Serializable {
 	@Column(name = "nomeCompleto")
 	private String nomeCompleto;
 
+	@Column(name = "email")
+	private String email;
+
 	@Column(name = "dataNascimento")
 	@Temporal(TemporalType.DATE)
-	private Date dataNasciamento;
+	private Date dataNascimento;
 
 	@Column(name = "statusCliente")
 	private Integer statusCliente;
@@ -56,12 +59,20 @@ public class Cliente implements Serializable {
 		this.nomeCompleto = nomeCompleto;
 	}
 
-	public Date getDataNasciamento() {
-		return dataNasciamento;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setDataNasciamento(Date dataNasciamento) {
-		this.dataNasciamento = dataNasciamento;
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 	public Integer getStatusCliente() {
@@ -85,7 +96,8 @@ public class Cliente implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((clienteId == null) ? 0 : clienteId.hashCode());
-		result = prime * result + ((dataNasciamento == null) ? 0 : dataNasciamento.hashCode());
+		result = prime * result + ((dataNascimento == null) ? 0 : dataNascimento.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((nomeCompleto == null) ? 0 : nomeCompleto.hashCode());
 		result = prime * result + ((statusCliente == null) ? 0 : statusCliente.hashCode());
 		result = prime * result + ((timeCoracao == null) ? 0 : timeCoracao.hashCode());
@@ -106,17 +118,25 @@ public class Cliente implements Serializable {
 				return false;
 		} else if (!clienteId.equals(other.clienteId))
 			return false;
-		if (dataNasciamento == null) {
-			if (other.dataNasciamento != null)
+		if (dataNascimento == null) {
+			if (other.dataNascimento != null)
 				return false;
-		} else if (!dataNasciamento.equals(other.dataNasciamento))
+		} else if (!dataNascimento.equals(other.dataNascimento))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
 			return false;
 		if (nomeCompleto == null) {
 			if (other.nomeCompleto != null)
 				return false;
 		} else if (!nomeCompleto.equals(other.nomeCompleto))
 			return false;
-		if (statusCliente != other.statusCliente)
+		if (statusCliente == null) {
+			if (other.statusCliente != null)
+				return false;
+		} else if (!statusCliente.equals(other.statusCliente))
 			return false;
 		if (timeCoracao == null) {
 			if (other.timeCoracao != null)
@@ -128,8 +148,9 @@ public class Cliente implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Cliente [clienteId=" + clienteId + ", nomeCompleto=" + nomeCompleto + ", dataNasciamento="
-				+ dataNasciamento + ", statusCliente=" + statusCliente + ", timeCoracao=" + timeCoracao + "]";
+		return "Cliente [clienteId=" + clienteId + ", nomeCompleto=" + nomeCompleto + ", email=" + email
+				+ ", dataNascimento=" + dataNascimento + ", statusCliente=" + statusCliente + ", timeCoracao="
+				+ timeCoracao + "]";
 	}
 
 }

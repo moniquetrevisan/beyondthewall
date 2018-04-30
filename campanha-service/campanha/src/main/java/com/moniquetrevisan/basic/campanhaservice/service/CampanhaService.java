@@ -10,6 +10,7 @@ import com.moniquetrevisan.basic.campanhaservice.model.Campanha;
 import com.moniquetrevisan.basic.campanhaservice.repository.AssociacaoCampanhaClienteRepository;
 import com.moniquetrevisan.basic.campanhaservice.repository.CampanhaRepository;
 import com.moniquetrevisan.basic.campanhaservice.util.DateUtil;
+import com.moniquetrevisan.basic.campanhaservice.util.StatusDefaults;
 
 @Service
 public class CampanhaService {
@@ -30,11 +31,11 @@ public class CampanhaService {
 		boolean notFoundAlerta = Boolean.FALSE;
 		String errorMessage = "";
 
-		Campanha campanha = repository.findOne(campanhaId);
+		Campanha campanha = repository.findCampanhaByCampanhaId(campanhaId, StatusDefaults.CAMPANHA_EXPIRADA);
 		if (null == campanha) {
 			notFoundAlerta = Boolean.TRUE;
 			errorMessage = "Não foi encontrada nenhuma campanha para este id";
-		} else if (campanha.getStatusCampanha() == 3) {
+		} else if (campanha.getStatusCampanha() == StatusDefaults.CAMPANHA_EXPIRADA) {
 			notFoundAlerta = Boolean.TRUE;
 			errorMessage = "Esta campanha esta expirada e portanto não sera retornada.";
 		}
@@ -61,7 +62,7 @@ public class CampanhaService {
 	 * @return lista de todas as campanhas ativas do time do coracao pesquisado
 	 */
 	public List<Campanha> findAllCampanhasByTimeCoracao(Integer timeCoracaoId) {
-		return repository.findCampanhaByTimeCoracaoId(timeCoracaoId);
+		return repository.findCampanhaByTimeCoracaoId(timeCoracaoId, StatusDefaults.CAMPANHA_EXPIRADA);
 	}
 
 	/**
@@ -90,7 +91,7 @@ public class CampanhaService {
 	 * @param campanha - campanha a ser validada
 	 */
 	private void validateAndFixOverlaps(Campanha campanha) {
-		List<Campanha> overlappings = repository.findOverlapCampanhas(campanha.getCampanhaId(), campanha.getTimeCoracao().getTimeCoracaoId(), campanha.getDataInicio(), campanha.getDataVencimento());
+		List<Campanha> overlappings = repository.findOverlapCampanhas(campanha.getCampanhaId(), campanha.getTimeCoracao().getTimeCoracaoId(), campanha.getDataInicio(), campanha.getDataVencimento(), StatusDefaults.CAMPANHA_EXPIRADA);
 
 		if (overlappings != null && !overlappings.isEmpty()) {
 			fixOverlapsDataVencimento(campanha, overlappings);

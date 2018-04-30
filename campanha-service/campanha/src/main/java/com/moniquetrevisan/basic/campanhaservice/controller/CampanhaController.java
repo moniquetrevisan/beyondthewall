@@ -19,12 +19,12 @@ import com.moniquetrevisan.basic.campanhaservice.service.CampanhaService;
 @RestController
 @RequestMapping("/campanha")
 public class CampanhaController {
-	
+
 	private static Logger log = Logger.getLogger(CampanhaController.class);
-	
+
 	@Autowired
 	private CampanhaService service;
-	
+
 	@RequestMapping(path = "/findById/{campanhaId}", method = RequestMethod.GET)
 	public ResponseEntity<Campanha> findById(@PathVariable("campanhaId") Integer campanhaId){
 		ResponseEntity<Campanha> response = null;
@@ -40,7 +40,7 @@ public class CampanhaController {
 		}
 		return response;
 	}
-	
+
 	@RequestMapping(path = "/delete/{campanhaId}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable("campanhaId") Integer campanhaId){
 		ResponseEntity<Void> response = null;
@@ -53,8 +53,7 @@ public class CampanhaController {
 		}
 		return response;
 	}
-	
-	
+
 	@RequestMapping(path = "/findAllCampanhasByTimeCoracaoId/{timeCoracaoId}", method = RequestMethod.GET)
 	public ResponseEntity<List<Campanha>> findAllCampanhasByTimeCoracaoId(@PathVariable("timeCoracaoId") Integer timeCoracaoId){
 		ResponseEntity<List<Campanha>> response = null;
@@ -67,27 +66,11 @@ public class CampanhaController {
 		}
 		return response;
 	}
-	
-	
-	/*@RequestMapping(path = "/create/{nome}/{timeCoracaoId}/{dataVigencia}", method = RequestMethod.POST)
-	public ResponseEntity<Campanha> create(@PathVariable("nome") String nome, @PathVariable("timeCoracaoId") Integer timeCoracaoId, @PathVariable("dataVigencia") String dataVigencia){
-		ResponseEntity<Campanha> response = null;
-		try {
-			
-			Campanha saved = service.create(nome, timeCoracaoId, dataVigencia);
-			response = new ResponseEntity<Campanha>(saved, HttpStatus.CREATED);
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			response = new ResponseEntity<Campanha>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return response;
-	}*/
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Campanha> create(@RequestBody Campanha campanha){
 		ResponseEntity<Campanha> response = null;
 		try {
-			
 			Campanha saved = service.create(campanha);
 			response = new ResponseEntity<Campanha>(saved, HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -96,7 +79,7 @@ public class CampanhaController {
 		}
 		return response;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Campanha> update(@RequestBody Campanha campanha){
 		ResponseEntity<Campanha> response = null;

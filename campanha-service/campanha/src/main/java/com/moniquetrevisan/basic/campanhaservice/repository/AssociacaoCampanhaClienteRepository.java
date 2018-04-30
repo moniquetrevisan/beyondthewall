@@ -12,7 +12,7 @@ import com.moniquetrevisan.basic.campanhaservice.model.Campanha;
 
 @Repository
 public interface AssociacaoCampanhaClienteRepository extends JpaRepository<AssociacaoCampanhaCliente, Integer> {
-	
+
 	@Query("select campanha from Campanha campanha, AssociacaoClienteCampanha assoc where campanha.campanhaId = assoc.campanhaId and campanha.statusCampanha <> 3 and assoc.clienteId = :clienteId")
 	List<Campanha> findAllCampanhasAssociadasByCliente(@Param("clienteId") Integer clienteId);
 

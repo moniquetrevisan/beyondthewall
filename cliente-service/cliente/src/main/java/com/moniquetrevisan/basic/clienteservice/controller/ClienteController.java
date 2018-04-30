@@ -17,7 +17,7 @@ import com.moniquetrevisan.basic.clienteservice.service.ClienteService;
 @RequestMapping("/cliente")
 public class ClienteController {
 
-private static Logger log = Logger.getLogger(ClienteController.class);
+	private static Logger log = Logger.getLogger(ClienteController.class);
 
 	@Autowired
 	private ClienteService service;

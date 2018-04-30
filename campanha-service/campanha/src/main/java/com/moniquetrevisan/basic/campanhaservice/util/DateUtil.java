@@ -33,7 +33,7 @@ public class DateUtil {
 		try {
 			String dateStr = formatter.print(date, new Locale("pt", "BR"));
 			String todayStr = formatter.print(today(), new Locale("pt", "BR"));
-			
+
 			Date dateFormatted = dateFormat.parse(dateStr);
 			Date todayFormatted = dateFormat.parse(todayStr);
 			if (todayFormatted.compareTo(dateFormatted) == 0) { 
@@ -44,7 +44,7 @@ public class DateUtil {
 		}
 		return false;
 	}
-	
+
 	public static Date plusDay(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -64,5 +64,5 @@ public class DateUtil {
 		// in tese this is never hppn
 		return new Date();
 	}
-	
+
 }

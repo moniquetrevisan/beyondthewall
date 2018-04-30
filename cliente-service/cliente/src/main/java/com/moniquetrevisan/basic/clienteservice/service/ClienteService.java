@@ -13,6 +13,7 @@ public class ClienteService {
 	private ClienteRepository repository;
 
 	public Cliente save(Cliente cliente) {
+		findClienteByClienteId(cliente.get)
 		return repository.save(cliente);
 	}
 
@@ -20,4 +21,8 @@ public class ClienteService {
 		return repository.findClienteByClienteId(clienteId);
 	}
 
+	public Cliente findClienteByEmail(String email) {
+		return repository.findClienteByEmail(email);
+	}
+	
 }
