@@ -1,7 +1,5 @@
 package com.moniquetrevisan.basic.campanhaservice.controller;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +23,7 @@ public class CampanhaController {
 	@Autowired
 	private CampanhaService service;
 	
-	@RequestMapping(path = "/findById/{campanhaId}", method = RequestMethod.GET)
+	@RequestMapping(path = "/findById/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Campanha> findById(@PathVariable("campanhaId") Integer campanhaId){
 		ResponseEntity<Campanha> response = null;
 		try {
@@ -41,7 +39,7 @@ public class CampanhaController {
 		return response;
 	}
 	
-	@RequestMapping(path = "/delete/{campanhaId}", method = RequestMethod.DELETE)
+	@RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable("campanhaId") Integer campanhaId){
 		ResponseEntity<Void> response = null;
 		try {
@@ -53,24 +51,6 @@ public class CampanhaController {
 		}
 		return response;
 	}
-	
-	
-	@RequestMapping(path = "/AllCampanhasByTimeCoracaoId/{timeCoracaoId}", method = RequestMethod.GET)
-	public ResponseEntity<List<Campanha>> findAllCampanhasByTimeCoracaoId(@PathVariable("timeCoracaoId") Integer timeCoracaoId){
-		ResponseEntity<List<Campanha>> response = null;
-		try {
-			List<Campanha> campanha = service.findAllCampanhasByTimeCoracao(timeCoracaoId);
-			response = new ResponseEntity<List<Campanha>>(campanha, HttpStatus.OK);
-		} catch (NotFoundException e) {
-			log.error(e.getMessage(), e);
-			response =  new ResponseEntity<List<Campanha>>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			response =  new ResponseEntity<List<Campanha>>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return response;
-	}
-	
 	
 	/*@RequestMapping(path = "/create/{nome}/{timeCoracaoId}/{dataVigencia}", method = RequestMethod.POST)
 	public ResponseEntity<Campanha> create(@PathVariable("nome") String nome, @PathVariable("timeCoracaoId") Integer timeCoracaoId, @PathVariable("dataVigencia") String dataVigencia){

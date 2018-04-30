@@ -20,6 +20,12 @@ public class CampanhaService {
 	@Autowired
 	private AssociacaoCampanhaClienteRepository associacaoRepository;
 
+	/**
+	 * Procura uma camapnha atraves de seu id
+	 * @param campanhaId
+	 * @return a camanha ativa correspondente a este id
+	 * @throws NotFoundException - Ou nao existe referente ou a campanha esta expirada e por isso nao deve ser retornada
+	 */
 	public Campanha findById(Integer campanhaId) throws NotFoundException {
 		boolean notFoundAlerta = Boolean.FALSE;
 		String errorMessage = "";
@@ -40,44 +46,71 @@ public class CampanhaService {
 		return repository.findOne(campanhaId);
 	}
 
-	public Iterable<Campanha> findAllCampanhasByCliente(Integer clienteId) {
-		List<Campanha> campanhasCliente = associacaoRepository.findCampanhaByClienteId(clienteId);
-		return campanhasCliente;
-	}
-
-	/*public Campanha create(String nome, Integer timeCoracaoId, String dataVigencia) {
-		String[] dataVigenciaArr = dataVigencia.split(";");
-		Date dataInicio = DateUtil.getDateByString(dataVigenciaArr[0]);
-		Date dataVencimento = DateUtil.getDateByString(dataVigenciaArr[0]);
-
-		Campanha campanhaCadastrada = repository.save(new Campanha(nome, timeCoracaoId, dataInicio, dataVencimento));
-		return campanhaCadastrada;
-	}*/
-
-	public void delete(Integer id) {
-		repository.delete(id);
+	/**
+	 * Procura todas as campanhas ativas que estão associadas a este cliente
+	 * @param clienteId - id do cliente a ser procurada as campanhas associadas
+	 * @return List com todas as campanhas ativas que este cliente esta associado 
+	 */
+	public List<Campanha> findAllCampanhasAssociadasByCliente(Integer clienteId) {
+		return associacaoRepository.findAllCampanhasAssociadasByCliente(clienteId);
 	}
 	
+	/**
+	 * Procura todas as campanhas ativas para determinado time do coracao
+	 * @param timeCoracaoId - time a ser procurado
+	 * @return lista de todas as campanhas ativas do time do coracao pesquisado
+	 */
+	public List<Campanha> findAllCampanhasByTimeCoracao(Integer timeCoracaoId) {
+		return repository.findCampanhaByTimeCoracaoId(timeCoracaoId);
+	}
+
+	/**
+	 * Exclui defitivamente uma campanha  
+	 * @param campanhaId - id da campanha a ser removida
+	 */
+	public void delete(Integer campanhaId) {
+		repository.delete(campanhaId);
+	}
+	
+	/**
+	 * Salva no banco de dados uma nova campanha
+	 * @param campanha - campanha a ser gravada no banco de dados
+	 * @return retorna a campanha que foi salva no banco de dados
+	 */
 	public Campanha create(Campanha campanha) {
-		validateOverlapCampanha(campanha);
+		validateAndFixOverlaps(campanha);
 
 		Campanha campanhaCadastrada = repository.save(campanha);
 		return campanhaCadastrada;
 	}
 
-	private void validateOverlapCampanha(Campanha campanha) {
-		List<Campanha> overlappings = repository.findOverladDeCampanhas(campanha.getCampanhaId(), campanha.getTimeCoracao().getTimeCoracaoId(), campanha.getDataInicio(), campanha.getDataVencimento());
+	/**
+	 * Valida se existem campanhas relacionadas no intervalo de tempo da camapnha a ser cadastrada.
+	 * Caso existam campanhas relacionadas, é acrescentado um dia ao final das campanhas relacionadas e assim sucessivamente ate que nao existam duas pesquisas do mesmo time com a mesma data de vencimento 
+	 * @param campanha - campanha a ser validada
+	 */
+	private void validateAndFixOverlaps(Campanha campanha) {
+		List<Campanha> overlappings = repository.findOverlapCampanhas(campanha.getCampanhaId(), campanha.getTimeCoracao().getTimeCoracaoId(), campanha.getDataInicio(), campanha.getDataVencimento());
 
 		if (overlappings != null && !overlappings.isEmpty()) {
-			addDayInOverlappings(overlappings, campanha);
-
-			Iterable<Campanha> updateOverlaps = overlappings;
-			updateOverlaps = repository.save(updateOverlaps);
+			fixOverlapsDataVencimento(campanha, overlappings);
 		}
 	}
 
 	/**
-	 * 
+	 * Executa a logica necessaria para que nao existam campanhas ativas do mesmo time com a mesma data de vencimento
+	 * @param campanha - campanha nova com a referencia de periodo (Data de vencimento)
+	 * @param overlappings - lista de campanhas relacionadas ao periodo da nova campanha
+	 */
+	private void fixOverlapsDataVencimento(Campanha campanha, List<Campanha> overlappings) {
+		addDayInOverlappings(overlappings, campanha);
+
+		Iterable<Campanha> updateOverlaps = overlappings;
+		updateOverlaps = repository.save(updateOverlaps);
+	}
+
+	/**
+	 * Trata recursivamente o cenario do efeito em cadeia da adiacao de dia na data de vencimento para que nao existam datas de vencimentos no mesmo dia para o mesmo time 
 	 * @param campanhasVigentes
 	 * @param campanhaRef
 	 */
