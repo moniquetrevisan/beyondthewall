@@ -1,4 +1,4 @@
-package com.moniquetrevisan.basic;
+package com.moniquetrevisan.basic.clienteservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

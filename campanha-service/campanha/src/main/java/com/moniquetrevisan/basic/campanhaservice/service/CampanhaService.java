@@ -3,13 +3,15 @@ package com.moniquetrevisan.basic.campanhaservice.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.amqp.AmqpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.moniquetrevisan.basic.campanhaservice.exception.AllAssociateException;
 import com.moniquetrevisan.basic.campanhaservice.exception.NotFoundException;
+import com.moniquetrevisan.basic.campanhaservice.exception.NotificacaoException;
 import com.moniquetrevisan.basic.campanhaservice.model.Campanha;
-import com.moniquetrevisan.basic.campanhaservice.repository.AssociacaoCampanhaClienteRepository;
 import com.moniquetrevisan.basic.campanhaservice.repository.CampanhaRepository;
 import com.moniquetrevisan.basic.campanhaservice.util.DateUtil;
 import com.moniquetrevisan.basic.campanhaservice.util.StatusDefaults;
@@ -21,12 +23,12 @@ public class CampanhaService {
 	private CampanhaRepository repository;
 
 	@Autowired
-	private AssociacaoCampanhaClienteRepository associacaoRepository;
+	private NotificadorCampanhaService notificadorCampanhaService;
 
 	/**
 	 * Procura uma camapnha atraves de seu id
 	 * @param campanhaId
-	 * @return a camanha ativa correspondente a este id
+	 * @return a campanha ativa correspondente a este id
 	 * @throws NotFoundException - Ou nao existe referente ou a campanha esta expirada e por isso nao deve ser retornada
 	 */
 	public Campanha findCampanhaByCampanhaId(Integer campanhaId) throws NotFoundException {
@@ -45,15 +47,6 @@ public class CampanhaService {
 			throw new NotFoundException(errorMessage);
 		}
 		return repository.findOne(campanhaId);
-	}
-
-	/**
-	 * Procura todas as campanhas ativas que estão associadas a este cliente
-	 * @param clienteId - id do cliente a ser procurada as campanhas associadas
-	 * @return List com todas as campanhas ativas que este cliente esta associado 
-	 */
-	public List<Campanha> findAllCampanhasAssociadasByCliente(Integer clienteId) {
-		return associacaoRepository.findAllCampanhasAssociadasByCliente(clienteId);
 	}
 
 	/**
@@ -78,19 +71,27 @@ public class CampanhaService {
 	 * @param campanha - campanha a ser gravada no banco de dados
 	 * @return retorna a campanha que foi salva no banco de dados
 	 */
-	public Campanha create(Campanha campanha) {
+	public Campanha create(Campanha campanha) throws NotificacaoException {
 		validateAndFixOverlaps(campanha);
 
-		Campanha campanhaCadastrada = repository.save(campanha);
-		return campanhaCadastrada;
+		Campanha saved = repository.save(campanha);
+		
+		try {
+			notificadorCampanhaService.notificarCadastro(saved);
+		} catch (AmqpException | JsonProcessingException e) {
+			throw new NotificacaoException("Falha ao tentar notificar cadastro da campanha " + saved, e);
+		}
+		
+		return saved;
 	}
 
 	/**
 	 * Valida se existem campanhas relacionadas no intervalo de tempo da camapnha a ser cadastrada.
 	 * Caso existam campanhas relacionadas, é acrescentado um dia ao final das campanhas relacionadas e assim sucessivamente ate que nao existam duas pesquisas do mesmo time com a mesma data de vencimento 
 	 * @param campanha - campanha a ser validada
+	 * @throws NotificacaoException 
 	 */
-	private void validateAndFixOverlaps(Campanha campanha) {
+	private void validateAndFixOverlaps(Campanha campanha) throws NotificacaoException {
 		List<Campanha> overlappings = repository.findOverlapCampanhas(campanha.getCampanhaId(), campanha.getTimeCoracao().getTimeCoracaoId(), campanha.getDataInicio(), campanha.getDataVencimento(), StatusDefaults.CAMPANHA_EXPIRADA);
 
 		if (overlappings != null && !overlappings.isEmpty()) {
@@ -102,12 +103,19 @@ public class CampanhaService {
 	 * Executa a logica necessaria para que nao existam campanhas ativas do mesmo time com a mesma data de vencimento
 	 * @param campanha - campanha nova com a referencia de periodo (Data de vencimento)
 	 * @param overlappings - lista de campanhas relacionadas ao periodo da nova campanha
+	 * @throws NotificacaoException 
 	 */
-	private void fixOverlapsDataVencimento(Campanha campanha, List<Campanha> overlappings) {
+	private void fixOverlapsDataVencimento(Campanha campanha, List<Campanha> overlappings) throws NotificacaoException {
 		addDayInOverlappings(overlappings, campanha);
 
-		Iterable<Campanha> updateOverlaps = overlappings;
+		List<Campanha> updateOverlaps = overlappings;
 		updateOverlaps = repository.save(updateOverlaps);
+		
+		try {
+			notificadorCampanhaService.notificarAlteracoes(updateOverlaps);
+		} catch (AmqpException | JsonProcessingException e) {
+			throw new NotificacaoException("Falha ao tentar notificar alterações realizadas nas campanhas", e);
+		}
 	}
 
 	/**

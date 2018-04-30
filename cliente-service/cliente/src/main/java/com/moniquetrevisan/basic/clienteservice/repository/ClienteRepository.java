@@ -10,23 +10,16 @@ import com.moniquetrevisan.basic.clienteservice.model.Cliente;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
-	/*
-	 * StatusCliente 
-	 *   1 - Ativo 
-	 *   2 - Inativo
-	 *
-	 */
-
 	@Query("select cliente " 
 		+ " from Cliente cliente " 
-		+ " where cliente.statusCliente <> 2 "
+		+ " where cliente.statusCliente <> :status "
 		+ "   and cliente.clienteId = :clienteId")
-	Cliente findClienteByClienteId(@Param("clienteId") Integer clienteId);
+	Cliente findClienteByClienteId(@Param("clienteId") Integer clienteId, @Param("status") Integer status);
 
 	@Query("select cliente " 
 			+ " from Cliente cliente " 
-			+ " where cliente.statusCliente <> 2 "
+			+ " where cliente.statusCliente <> :status "
 			+ "   and cliente.email = :email")
-	Cliente findClienteByEmail(@Param("email") String email);
+	Cliente findClienteByEmail(@Param("email") String email, @Param("status") Integer status);
 
 }

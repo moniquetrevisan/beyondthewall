@@ -23,6 +23,11 @@ public class AssociacaoClienteCampanhaService {
 	@Autowired
 	private CampanhaService campanhaService;
 
+	/**
+	 * Procura todas as campanhas ativas que estão associadas a este cliente
+	 * @param clienteId - id do cliente a ser procurada as campanhas associadas
+	 * @return List com todas as campanhas ativas que este cliente esta associado 
+	 */
 	public List<Campanha> findAllCampanhasAssociadasByCliente(Integer clienteId) throws NotFoundException{
 		List<Campanha> campanhasAssoc = repository.findAllCampanhasAssociadasByCliente(clienteId);
 		if(campanhasAssoc == null || campanhasAssoc.isEmpty()) {

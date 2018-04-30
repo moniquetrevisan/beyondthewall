@@ -19,13 +19,13 @@ public interface CampanhaServiceExternal {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/campanha/findAllCampanhasByTimeCoracaoId")
 	public List<Campanha> findAllCampanhasByTimeCoracaoId(@RequestParam("timeCoracaoId") Integer timeCoracaoId);
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/associacaoCampanha")
 	public AssociacaoCampanhaCliente associateNew(@RequestBody AssociacaoCampanhaCliente assoc);
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/associacaoCampanha")
 	public List<Campanha> consultarCampanhasNaoAssociadas(@RequestParam("clienteId") Integer clienteId, @RequestParam("timeCoracaoId") Integer timeCoracaoId);
-	
+
 	@Component
 	static class CampanhaClientFallback implements CampanhaServiceExternal {
 		
@@ -35,17 +35,16 @@ public interface CampanhaServiceExternal {
 			log.warn("[Campanha-Service -- something is wrong] Consulta de campanhas do time do coração não está disponível neste momento. Entre em contato com os administradores do serviço.");
 			return null;
 		}
-		
+
 		public AssociacaoCampanhaCliente associateNew(@RequestBody AssociacaoCampanhaCliente assoc) {
 			log.warn("Fallback para campanha-service: Associação de campanhas indisponível");
 			return null;
 		}
-		
+
 		public List<Campanha> consultarCampanhasNaoAssociadas(@RequestParam("clienteId") Integer clienteId, @RequestParam("timeCoracaoId") Integer timeCoracaoId){
 			log.warn("[Campanha-Service -- something is wrong] Consulta de campanhas não associadas não está disponível neste momento. Entre em contato com os administradores do serviço.");
 			return null;
 		}
-		
 	}
 
 }
