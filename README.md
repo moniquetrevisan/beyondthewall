@@ -4,8 +4,6 @@ Beyond The Wall
 --------------------------
 Este repositório possui um sistema simples que permite o cadastro e consulta de clientes e campanhas. Desenvolvido para atender aos requisitos do desafio. 
 
-- Exercício 1 e 2
-
     Arquitetura de Microserviços
     --------------------------
     De acordo com os requisitos do sistema, deveriam ser criados serviços diferentes para atender as demandas relacionadas ao cadastro de campanhas, clientes e associação entre eles, para isso utilizei a arquitetura de microserviços, pois é a que mais atende a esses requisitos. 
