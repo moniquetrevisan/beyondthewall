@@ -2,7 +2,7 @@
 
 Beyond The Wall 
 --------------------------
-Este repositório possui um sistema simples que permite o cadastro e consulta de clientes e campanhas. Desenvolvido para atender aos requisitos do desafio. 
+Este repositório possui um sistema simples que permite o cadastro e consulta de clientes e campanhas.  
 
     Arquitetura de Microserviços
     --------------------------
